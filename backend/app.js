@@ -1,6 +1,11 @@
 // Ensure express is required
 const express = require("express");
+const helmet = require("helmet");
 const app = express();
+
+// Use helmet
+app.use(helmet());
+
 const port = process.env.PORT || 8080;
 
 // file reader
