@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "install": "cd client && npm run build && cd .."
   },
   "author": "Pieter Slabbert",
   "license": "ISC",
@@ -13,5 +14,10 @@
     "body-parser": "^1.20.2",
     "helmet": "^7.1.0",
     "nodemon": "^3.0.3"
-  }
+  },
+  "engines": {
+    "node": "21.2.0",
+    "npm": "10.2.3"
+  },
+  "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
 }
