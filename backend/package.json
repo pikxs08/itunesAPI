@@ -21,6 +21,5 @@
   "engines": {
     "node": "21.2.0",
     "npm": "10.2.3"
-  },
-  "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix backend && npm run build --prefix backend"
+  }
 }
