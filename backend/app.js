@@ -28,6 +28,10 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
+app.get("/", (req, res) => {
+  res.send({ msg: "welcome to muneeb's backend" });
+});
+
 app.get("/api", (req, res) => {
   fs.readFile("favorites.json", (err, data) => {
     if (err) {
