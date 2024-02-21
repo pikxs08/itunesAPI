@@ -1,95 +1,16 @@
-// Ensure express is required
-const express = require("express");
-const helmet = require("helmet");
-const app = express();
-
-// Heroku deployment
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static(path.join(__dirname, "frontend/build")));
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
-//   });
-// }
-
-// Use helmet
-app.use(helmet());
-
-const port = process.env.PORT || 8080;
-
-// file reader
-const fs = require("fs");
-
-// Ensure body parser is running
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
-app.get("/", (req, res) => {
-  res.send({ msg: "welcome to muneeb's backend" });
-});
+const app = require("express")();
+const { v4 } = require("uuid");
 
 app.get("/api", (req, res) => {
-  fs.readFile("favorites.json", (err, data) => {
-    if (err) {
-      res.status(500).send("Error getting data");
-    } else {
-      const jsonData = JSON.parse(data);
-      res.send(jsonData);
-    }
-  });
+  const path = `/api/item/${v4()}`;
+  res.setHeader("Content-Type", "text/html");
+  res.setHeader("Cache-Control", "s-max-age=1, stale-while-revalidate");
+  res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
 });
 
-function getFavorites() {
-  try {
-    const favorites = fs.readFileSync("favorites.json");
-    return JSON.parse(favorites);
-  } catch (e) {
-    // file non-existent
-    fs.writeFileSync("favorites.json", "[]");
-    return [];
-  }
-}
-
-function addFavorite(id, title, artistName, img) {
-  const favorites = getFavorites();
-  favorites.push({
-    id: id,
-    title: title,
-    artistName: artistName,
-    img: img,
-  });
-  fs.writeFileSync("favorites.json", JSON.stringify(favorites));
-}
-
-app.post("/post", (req, res) => {
-  const favorites = getFavorites();
-  const newTitle = req.body.title;
-  const newArtistName = req.body.artistName;
-  const newImg = req.body.img;
-
-  // Check if the project already exists
-  const favoriteExists = favorites.some(
-    (favorite) => favorite.title === newTitle
-  );
-
-  if (favoriteExists) {
-    res.status(200).json({ message: "Favorite already exists" });
-  } else {
-    addFavorite(favorites.length + 1, newTitle, newArtistName, newImg);
-    res.status(200).json({ message: "Favorite added" });
-  }
+app.get("/api/item/:slug", (req, res) => {
+  const { slug } = req.params;
+  res.end(`Item: ${slug}`);
 });
 
-app.delete("/delete", (req, res) => {
-  const favorites = getFavorites();
-  const title = req.body.title;
-
-  const newFavorites = favorites.filter((favorite) => favorite.title !== title);
-
-  fs.writeFileSync("favorites.json", JSON.stringify(newFavorites));
-  res.status(200).json({ message: "Favorite deleted" });
-});
+module.exports = app;
