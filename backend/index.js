@@ -2,7 +2,7 @@
 const express = require("express");
 const helmet = require("helmet");
 const app = express();
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
@@ -90,8 +90,4 @@ app.delete("/delete", (req, res) => {
 
   fs.writeFileSync("favorites.json", JSON.stringify(newFavorites));
   res.status(200).json({ message: "Favorite deleted" });
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });
