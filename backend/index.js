@@ -91,3 +91,7 @@ app.delete("/delete", (req, res) => {
   fs.writeFileSync("favorites.json", JSON.stringify(newFavorites));
   res.status(200).json({ message: "Favorite deleted" });
 });
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
