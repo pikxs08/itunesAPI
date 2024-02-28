@@ -19,10 +19,6 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.send({ msg: "welcome to muneeb's backend" });
-});
-
 app.get("/api", (req, res) => {
   fs.readFile("favorites.json", (err, data) => {
     if (err) {
